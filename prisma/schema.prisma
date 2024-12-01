@@ -1,0 +1,31 @@
+// schema.prisma
+
+datasource db {
+  provider = "postgresql" // Use MySQL or SQLite if preferred
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Document {
+  id                   String   @id @default(uuid())
+  title                String
+  content              String?
+  coverImage           String?
+  icon                 String?
+  isPublished          Boolean
+  isArchived           Boolean
+  createdAt            DateTime @default(now())
+  lastModifiedAt       DateTime @updatedAt
+  userId               String
+  parentDocument       String?
+  childDocuments       String[] @default([])
+  tags                 String[] @default([])
+  collaborationLink    String?
+  guestCollaborationId String[]
+
+  @@index([userId])
+  @@index([userId, parentDocument])
+}
