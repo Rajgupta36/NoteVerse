@@ -49,7 +49,7 @@ export default function GuestCollaborationPage() {
     }
   };
 
-  const handleEditorChange = (content) => {
+  const handleEditorChange = (content: any) => {
     // Implement real-time updates here
     console.log("Document content changed:", content);
     // You should send this update to your backend or WebSocket server
@@ -82,6 +82,7 @@ export default function GuestCollaborationPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Guest Collaboration</h1>
       <Editor
+        //@ts-ignore
         initialContent={documentData.content}
         editable={true}
         onChange={handleEditorChange}

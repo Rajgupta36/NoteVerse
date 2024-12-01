@@ -42,6 +42,7 @@ export async function archiveDocument({ documentId }: { documentId: string }) {
         return { message: 'Document archived successfully' };
     } catch (error) {
         console.error(error);
+        //@ts-ignore
         throw new Error(error.message || 'Internal server error');
     }
 }
