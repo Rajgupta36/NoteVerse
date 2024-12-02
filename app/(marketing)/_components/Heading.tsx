@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { Heroes } from "./Heroes";
 import { Spinner } from "@/components/spinner";
 import Link from "next/link";
 import { SignInButton, useAuth } from "@clerk/nextjs";
