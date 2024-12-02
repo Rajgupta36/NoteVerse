@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function MarketingPage() {
   return (
-    <div className="min-h-screen flex flex-col dark:bg-[#1F1F1F] relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col dark:bg-[#1F1F1F] relative overflow-hidden ">
       <div className="absolute top-0 left-0 right-0 ">
         <div className="flex justify-between items-center h-full w-full mx-auto max-w-7xl">
           <div className="relative w-[200px] h-[250px] sm:w-[300px] sm:h-[350px] md:w-[350px] opacity-30 sm:opacity-50 md:opacity-100 transform -translate-x-[5%] sm:-translate-x-[15%]">
