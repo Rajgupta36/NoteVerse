@@ -5,8 +5,8 @@ import { Title } from "./Title";
 import { Banner } from "./Banner";
 import { Menu } from "./Menu";
 import { Publish } from "./Publish";
+import { Collabrate } from "./Collabrate";
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
 interface NavbarProps {
   isCollapsed: boolean;
   onResetWidth: () => void;
@@ -70,6 +70,7 @@ export function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
         <div className="flex justify-between items-center w-full">
           <Title initialData={document} />
           <div className="flex gap-x-2 items-center">
+            <Collabrate initialData={document} />
             <Publish initialData={document} />
             <Menu documentId={document.id} />
           </div>

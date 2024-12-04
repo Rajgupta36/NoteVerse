@@ -15,15 +15,15 @@ model Document {
   content              String?
   coverImage           String?
   icon                 String?
-  isPublished          Boolean
-  isArchived           Boolean
+  isPublished          Boolean  @default(false)
+  isArchived           Boolean  @default(false)
+  isCollaborative      Boolean  @default(false)
   createdAt            DateTime @default(now())
   lastModifiedAt       DateTime @updatedAt
   userId               String
   parentDocument       String?
   childDocuments       String[] @default([])
   tags                 String[] @default([])
-  collaborationLink    String?
   guestCollaborationId String[]
 
   @@index([userId])

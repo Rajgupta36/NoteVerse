@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "websocket": "node websocket-server.js"
   },
   "dependencies": {
     "@blocknote/core": "^0.9.4",
@@ -22,6 +23,8 @@
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slot": "^1.0.2",
+    "@syncedstore/core": "^0.6.0",
+    "@syncedstore/react": "^0.6.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -34,10 +37,14 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-textarea-autosize": "^8.5.3",
+    "recoil": "^0.7.7",
     "sonner": "^1.0.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^2.9.1",
+    "y-webrtc": "^10.3.0",
+    "y-websocket": "^2.0.4",
+    "yjs": "^13.6.20",
     "zod": "^3.22.4",
     "zustand": "^4.4.3"
   },

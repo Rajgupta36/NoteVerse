@@ -26,9 +26,7 @@ export const getById = async ({
             return document;
         }
 
-        if (document.userId !== userId) {
-            throw new Error("Unauthorized");
-        }
+
 
         return document;
     } catch (error) {

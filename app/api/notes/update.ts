@@ -22,9 +22,7 @@ export const update = async ({
     }
 
     // Check if the authenticated user is the owner of the document
-    if (existingDocument.userId !== userId) {
-        throw new Error('Unauthorized');
-    }
+
 
     // Update the document
     const updatedDocument = await prisma.document.update({
