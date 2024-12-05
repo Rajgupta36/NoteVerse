@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   ChevronDown,
   ChevronRight,
@@ -17,9 +17,9 @@ import {
   MoreHorizontal,
   Plus,
   Trash,
-} from "lucide-react";
-import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { useUser } from '@clerk/nextjs';
 
 interface ItemProps {
   id?: any;
@@ -54,10 +54,10 @@ export function Item({
   // Create a new note with the given title and parent document
   const create = async (data: any) => {
     const { title, parentDocument } = data;
-    const response = await fetch("/api/notes?action=create", {
-      method: "POST",
+    const response = await fetch('/api/notes?action=create', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ title, parentDocument: parentDocument || null }),
     });
@@ -68,9 +68,9 @@ export function Item({
   // Archive a note by moving it to the trash
   const archive = async ({ documentId }: { documentId: string }) => {
     const response = await fetch(`/api/notes?action=archive`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ documentId }),
     });
@@ -88,9 +88,9 @@ export function Item({
       const promise = archive({ documentId: id });
 
       toast.promise(promise, {
-        loading: "archiving note...",
-        success: "note archived",
-        error: "Failed to archive note",
+        loading: 'archiving note...',
+        success: 'note archived',
+        error: 'Failed to archive note',
       });
 
       promise.then((data) => {
@@ -105,7 +105,7 @@ export function Item({
       });
     } catch (error) {
       console.log(error);
-      toast.error("Failed to move note to trash");
+      toast.error('Failed to move note to trash');
     }
   };
 
@@ -119,12 +119,12 @@ export function Item({
   const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     if (!id) return;
-    const promise = create({ title: "Untitled", parentDocument: id });
+    const promise = create({ title: 'Untitled', parentDocument: id });
 
     toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note",
+      loading: 'Creating a new note...',
+      success: 'New note created!',
+      error: 'Failed to create a new note',
     });
 
     promise.then((data) => {
@@ -143,11 +143,11 @@ export function Item({
       className={cn(
         `group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5
     flex items-center text-muted-foreground font-medium`,
-        active && "bg-primary/5 text-primary"
+        active && 'bg-primary/5 text-primary'
       )}
       onClick={onClick}
       role="button"
-      style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
+      style={{ paddingLeft: level ? `${level * 12 + 12}px` : '12px' }}
     >
       {/* Expand icon */}
       {!!id && (
@@ -228,7 +228,7 @@ Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
   return (
     <div
       className="flex gap-x-2 py-[3px]"
-      style={{ paddingLeft: level ? `${level * 12 + 25}px` : "12px" }}
+      style={{ paddingLeft: level ? `${level * 12 + 25}px` : '12px' }}
     >
       <Skeleton className="w-4 h-4" />
       <Skeleton className="w-4 h-[30%]" />

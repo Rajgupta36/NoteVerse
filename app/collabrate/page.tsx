@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { Cover } from "@/components/Cover";
-import { Skeleton } from "@/components/ui/skeleton";
-import CollabrativeEditor from "@/components/CollabrativeEditor";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState, useCallback } from 'react';
+import { Cover } from '@/components/Cover';
+import { Skeleton } from '@/components/ui/skeleton';
+import CollabrativeEditor from '@/components/CollabrativeEditor';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export default function CollaboratePage() {
   const [document, setDocument] = useState<any>(null);
-  const [content, setContent] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [content, setContent] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [username, setUsername] = useState<string>("");
-  const [documentId, setDocumentId] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
+  const [documentId, setDocumentId] = useState<string>('');
   const [accessStatus, setAccessStatus] = useState<
-    "idle" | "requested" | "granted" | "denied"
-  >("idle");
+    'idle' | 'requested' | 'granted' | 'denied'
+  >('idle');
 
   // Function to handle WebSocket connection
   const connectWebSocket = useCallback(() => {
@@ -25,38 +25,38 @@ export default function CollaboratePage() {
       return; // Socket is already open, no need to connect again
     }
 
-    const ws = new WebSocket("ws://localhost:1234");
+    const ws = new WebSocket('ws://localhost:1234');
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log('WebSocket connected');
     };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       switch (data.type) {
-        case "ACCESS_REQUESTED":
-          setAccessStatus("requested");
-          setDocument("content is ", data.content);
+        case 'ACCESS_REQUESTED':
+          setAccessStatus('requested');
+          setDocument(data.content);
           console.log(data.content);
           break;
-        case "ACCESS_GRANTED":
-          setAccessStatus("granted");
+        case 'ACCESS_GRANTED':
+          setAccessStatus('granted');
           break;
-        case "ACCESS_DENIED":
-          setAccessStatus("denied");
+        case 'ACCESS_DENIED':
+          setAccessStatus('denied');
           setError(data.message);
           break;
         default:
-          console.log("Unknown message type:", data.type);
+          console.log('Unknown message type:', data.type);
       }
     };
 
     ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
+      console.error('WebSocket error:', error);
     };
 
     ws.onclose = () => {
-      console.log("WebSocket disconnected");
+      console.log('WebSocket disconnected');
       setSocket(null); // Set socket to null on disconnect
       setTimeout(connectWebSocket, 5000); // Attempt to reconnect after 5 seconds
     };
@@ -66,15 +66,15 @@ export default function CollaboratePage() {
 
   // Handle the username input and WebSocket connection setup
   const handleRequestAccess = () => {
-    if (username && accessStatus === "idle") {
+    if (username && accessStatus === 'idle') {
       connectWebSocket();
       const param = new URL(window.location.href);
-      setDocumentId(param.searchParams.get("docId") || "");
+      setDocumentId(param.searchParams.get('docId') || '');
 
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({
-            type: "REQUEST_ACCESS",
+            type: 'REQUEST_ACCESS',
             documentId: documentId, // Set the actual document ID
             username,
           })
@@ -92,7 +92,7 @@ export default function CollaboratePage() {
   }, [socket]);
 
   // Render the component based on the current state
-  if (accessStatus === "idle") {
+  if (accessStatus === 'idle') {
     return (
       <div className="flex flex-col items-center justify-center min-h-full mt-20">
         <Input
@@ -109,7 +109,7 @@ export default function CollaboratePage() {
     );
   }
 
-  if (accessStatus === "requested") {
+  if (accessStatus === 'requested') {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg">Waiting for the owner to grant access...</p>
@@ -117,7 +117,7 @@ export default function CollaboratePage() {
     );
   }
 
-  if (accessStatus === "denied") {
+  if (accessStatus === 'denied') {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg text-red-500">{error}</p>
@@ -148,7 +148,7 @@ export default function CollaboratePage() {
         <h1 className="text-3xl font-bold mb-4">{document.title}</h1>
         <CollabrativeEditor
           onChange={() => {
-            console.log("hii");
+            console.log('hii');
           }}
           initialContent={content}
           documentId={documentId}

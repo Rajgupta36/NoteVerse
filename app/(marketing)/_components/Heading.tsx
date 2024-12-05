@@ -1,9 +1,9 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { Spinner } from "@/components/spinner";
-import Link from "next/link";
-import { SignInButton, useAuth } from "@clerk/nextjs";
+'use client';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { Spinner } from '@/components/spinner';
+import Link from 'next/link';
+import { SignInButton, useAuth } from '@clerk/nextjs';
 
 export default function Heading() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -11,7 +11,7 @@ export default function Heading() {
   return (
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
-        Your Ideas, Documents, & Plans. Unified. Welcome to{" "}
+        Your Ideas, Documents, & Plans. Unified. Welcome to{' '}
         <span className="underline">NoteVerse</span>
       </h1>
       <h3 className="text-base sm:text-xl md:text-2xl font-medium">

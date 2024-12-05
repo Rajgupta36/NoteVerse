@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { File } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { File } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 
 import {
   CommandDialog,
@@ -11,10 +11,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { useSearch } from "@/hooks/use-search";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+} from '@/components/ui/command';
+import { useSearch } from '@/hooks/use-search';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export function SearchCommand() {
   const { user } = useUser();
@@ -24,12 +24,12 @@ export function SearchCommand() {
     const onCreate = async () => {
       try {
         // Call API route to create the document
-        const response = await fetch("/api/notes?action=getAll", {
-          method: "GET",
+        const response = await fetch('/api/notes?action=getAll', {
+          method: 'GET',
         });
 
         if (!response.ok) {
-          throw new Error("Failed to Load docs");
+          throw new Error('Failed to Load docs');
         }
 
         const data = await response.json();
@@ -39,10 +39,10 @@ export function SearchCommand() {
           console.log(data);
           setDocument(data);
         } else {
-          toast.error("Failed to Load docs");
+          toast.error('Failed to Load docs');
         }
       } catch (error) {
-        toast.error("Failed to Load docs");
+        toast.error('Failed to Load docs');
         console.error(error);
       }
     };
@@ -60,17 +60,17 @@ export function SearchCommand() {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         toggle();
       }
     };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
   }, [toggle]);
 
   const onSelect = (key: string) => {
-    let id = key.split("secret")[0];
+    let id = key.split('secret')[0];
     router.push(`/documents/${id}`);
     onClose();
   };

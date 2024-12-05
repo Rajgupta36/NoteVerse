@@ -1,10 +1,9 @@
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import "@blocknote/core/style.css";
-import { useTheme } from "next-themes";
-import { useEdgeStore } from "@/lib/edgestore";
-import { useCollaboration } from "@/hooks/useCollabration";
-import { useEffect, useState } from "react";
+import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import { BlockNoteView, useBlockNote } from '@blocknote/react';
+import '@blocknote/core/style.css';
+import { useTheme } from 'next-themes';
+import { useEdgeStore } from '@/lib/edgestore';
+import { useEffect, useState } from 'react';
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -45,7 +44,7 @@ function Editor({
     <div>
       <BlockNoteView
         editor={editor}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
+        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
       />
     </div>
   );

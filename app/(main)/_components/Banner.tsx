@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { ConfirmModal } from "@/components/modals/confirm-modal";
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { ConfirmModal } from '@/components/modals/confirm-modal';
 
 interface BannerProps {
   documentId: any;
@@ -13,7 +13,7 @@ export function Banner({ documentId }: BannerProps) {
   const router = useRouter();
   const remove = async ({ id }: { id: string }) => {
     const response = await fetch(`/api/notes?documentId=${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
     const data = await response.json();
     return data;
@@ -21,7 +21,7 @@ export function Banner({ documentId }: BannerProps) {
   const restore = async ({ documentId }: { documentId: string }) => {
     console.log(documentId);
     const response = await fetch(`/api/notes?action=restore`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ id: documentId }),
     });
     const data = await response.json();
@@ -32,19 +32,19 @@ export function Banner({ documentId }: BannerProps) {
     const promise = remove({ id: documentId });
 
     toast.promise(promise, {
-      loading: "Deleting note...",
-      success: "Note deleted!",
-      error: "Failed to delete note.",
+      loading: 'Deleting note...',
+      success: 'Note deleted!',
+      error: 'Failed to delete note.',
     });
-    router.push("/documents");
+    router.push('/documents');
   };
 
   const onRestore = () => {
     const promise = restore({ documentId });
     toast.promise(promise, {
-      loading: "Restoring note...",
-      success: "Note restored!",
-      error: "Failed to restore note.",
+      loading: 'Restoring note...',
+      success: 'Note restored!',
+      error: 'Failed to restore note.',
     });
   };
 

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo } from "react";
-import dynamic from "next/dynamic";
-import { Toolbar } from "@/components/Toolbar";
-import { Cover } from "@/components/Cover";
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner"; // Assuming you're using this for toast notifications
+import { useState, useEffect, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+import { Toolbar } from '@/components/Toolbar';
+import { Cover } from '@/components/Cover';
+import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner'; // Assuming you're using this for toast notifications
 
 interface DocumentIdPageProps {
   params: {
@@ -18,7 +18,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
   const Editor = useMemo(
-    () => dynamic(() => import("@/components/Editor"), { ssr: false }),
+    () => dynamic(() => import('@/components/Editor'), { ssr: false }),
     []
   );
 
@@ -29,7 +29,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
         `/api/notes?action=getById&documentId=${params.documentId}`
       );
       if (!response.ok) {
-        toast.error("Failed to fetch document");
+        toast.error('Failed to fetch document');
         setIsLoading(false);
         return;
       }
@@ -43,19 +43,19 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   // Function to update the document content
   const updateDocument = async (content: string) => {
     try {
-      const response = await fetch("/api/notes?action=update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/notes?action=update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: params.documentId, content }),
       });
       if (!response.ok) {
-        throw new Error("Failed to update document");
+        throw new Error('Failed to update document');
       }
       const updatedDoc = await response.json();
-      toast.success("Document updated successfully");
+      toast.success('Document updated successfully');
       setDocument(updatedDoc); // Update document state after successful update
     } catch (error) {
-      toast.error("Failed to update document");
+      toast.error('Failed to update document');
     }
   };
 

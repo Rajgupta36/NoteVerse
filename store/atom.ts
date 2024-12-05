@@ -1,6 +1,6 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const collabrateAtom = atom<boolean>({
-    key: 'isCollab',
-    default: false,
+  key: 'isCollab',
+  default: false,
 });

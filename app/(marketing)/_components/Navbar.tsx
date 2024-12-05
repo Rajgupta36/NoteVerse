@@ -1,12 +1,12 @@
-"use client";
-import { useScrollTop } from "@/hooks/use-scroll-top";
-import { cn } from "@/lib/utils";
-import { Logo } from "./Logo";
-import { ModeToggle } from "@/components/mode-toggle";
-import { SignInButton, useAuth, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/spinner";
-import Link from "next/link";
+'use client';
+import { useScrollTop } from '@/hooks/use-scroll-top';
+import { cn } from '@/lib/utils';
+import { Logo } from './Logo';
+import { ModeToggle } from '@/components/mode-toggle';
+import { SignInButton, useAuth, UserButton } from '@clerk/nextjs';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/spinner';
+import Link from 'next/link';
 export function Navbar() {
   const { isSignedIn, isLoaded } = useAuth();
   const scrolled = useScrollTop();
@@ -14,7 +14,7 @@ export function Navbar() {
     <div
       className={cn(
         `z-50 bg-background dark:bg-[#1F1F1F]  flex items-center w-full p-6`,
-        scrolled && "border-b shadow-sm"
+        scrolled && 'border-b shadow-sm'
       )}
     >
       <Logo />

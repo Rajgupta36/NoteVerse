@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Check, Copy, Globe } from "lucide-react";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { Check, Copy, Globe } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover";
-import { useOrigin } from "@/hooks/use-origin";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/popover';
+import { useOrigin } from '@/hooks/use-origin';
+import { Button } from '@/components/ui/button';
 
 interface PublishProps {
   initialData: any;
@@ -25,10 +25,10 @@ export function Publish({ initialData }: PublishProps) {
     isPublished: boolean;
   }) => {
     try {
-      const response = await fetch("/api/notes?action=update", {
-        method: "POST",
+      const response = await fetch('/api/notes?action=update', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           id,
@@ -41,7 +41,7 @@ export function Publish({ initialData }: PublishProps) {
       if (!response.ok) {
         const errorDetails = await response.json(); // Assuming the server sends a message
         throw new Error(
-          errorDetails.message || "Failed to update publish status"
+          errorDetails.message || 'Failed to update publish status'
         );
       }
       initialData.isPublished = isPublished;
@@ -64,9 +64,9 @@ export function Publish({ initialData }: PublishProps) {
     }).finally(() => setIsSubmitting(false));
 
     toast.promise(promise, {
-      loading: "Publishing...",
-      success: "Note published",
-      error: "Error to publish note.",
+      loading: 'Publishing...',
+      success: 'Note published',
+      error: 'Error to publish note.',
     });
   };
 
@@ -79,9 +79,9 @@ export function Publish({ initialData }: PublishProps) {
     }).finally(() => setIsSubmitting(false));
 
     toast.promise(promise, {
-      loading: "Unpublishing...",
-      success: "Note unpublished",
-      error: "Error to unpublish note.",
+      loading: 'Unpublishing...',
+      success: 'Note unpublished',
+      error: 'Error to unpublish note.',
     });
   };
 

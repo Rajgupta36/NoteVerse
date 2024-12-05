@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useParams } from "next/navigation";
-import { ImageIcon, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useConverImage } from "@/hooks/use-cover-image";
-import { useEdgeStore } from "@/lib/edgestore";
-import { Skeleton } from "@/components/ui/skeleton";
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { ImageIcon, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useConverImage } from '@/hooks/use-cover-image';
+import { useEdgeStore } from '@/lib/edgestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface CoverProps {
   url?: string;
@@ -19,17 +19,17 @@ export function Cover({ url, preview }: CoverProps) {
   const params = useParams();
   const coverIamge = useConverImage();
   const removeCoverImage = async ({ id }: { id: string }) => {
-    const response = await fetch("/api/notes?action=removecoverimage", {
-      method: "POST",
+    const response = await fetch('/api/notes?action=removecoverimage', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         documentId: id,
       }),
     });
     if (!response.ok) {
-      throw new Error("Failed to remove cover image");
+      throw new Error('Failed to remove cover image');
     }
   };
 
@@ -48,8 +48,8 @@ export function Cover({ url, preview }: CoverProps) {
     <div
       className={cn(
         `relative w-full h-[35vh] group`,
-        !url && "h-[12vh]",
-        url && "bg-muted"
+        !url && 'h-[12vh]',
+        url && 'bg-muted'
       )}
     >
       {!!url && <Image className="object-cover" src={url} alt="Cover" fill />}

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
-import { PlusCircle } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import Image from 'next/image';
+import { useUser } from '@clerk/nextjs';
+import { PlusCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 export default function DocumentsPage() {
   const { user } = useUser();
@@ -15,31 +15,31 @@ export default function DocumentsPage() {
     setLoading(true);
     try {
       // Create context object
-      const context = { title: "Untitled" };
+      const context = { title: 'Untitled' };
 
       // Call API route to create the document
-      const response = await fetch("/api/notes?action=create", {
-        method: "POST",
+      const response = await fetch('/api/notes?action=create', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(context),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create a new note");
+        throw new Error('Failed to create a new note');
       }
 
       const data = await response.json();
       console.log(data);
 
       if (data) {
-        toast.success("New note created");
+        toast.success('New note created');
       } else {
-        toast.error("Failed to create a new note");
+        toast.error('Failed to create a new note');
       }
     } catch (error) {
-      toast.error("Failed to create a new note");
+      toast.error('Failed to create a new note');
       console.error(error);
     } finally {
       setLoading(false);
@@ -67,7 +67,7 @@ export default function DocumentsPage() {
       </h2>
       <Button onClick={onCreate} disabled={loading}>
         <PlusCircle className="w-4 h-4 mr-2" />
-        {loading ? "Creating..." : "Create note"}
+        {loading ? 'Creating...' : 'Create note'}
       </Button>
     </div>
   );

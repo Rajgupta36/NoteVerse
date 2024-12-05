@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { Toolbar } from "@/components/Toolbar";
-import { Cover } from "@/components/Cover";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useRecoilState } from "recoil";
-import { collabrateAtom } from "@/store/atom";
-import CollabrativeEditor from "@/components/CollabrativeEditor";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, useCallback } from 'react';
+import { Toolbar } from '@/components/Toolbar';
+import { Cover } from '@/components/Cover';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useRecoilState } from 'recoil';
+import { collabrateAtom } from '@/store/atom';
+import CollabrativeEditor from '@/components/CollabrativeEditor';
+import { Button } from '@/components/ui/button';
 
 interface DocumentIdPageProps {
   params: {
@@ -22,7 +22,7 @@ interface AccessRequest {
 
 export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   const [document, setDocument] = useState<any>(null);
-  const [content, setContent] = useState<string>("");
+  const [content, setContent] = useState<string>('');
   const [isCollaborative, setCollaborative] = useRecoilState(collabrateAtom);
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
@@ -34,14 +34,14 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
 
   // WebSocket connection to server
   const connectWebSocket = useCallback(() => {
-    const ws = new WebSocket("ws://localhost:1234");
+    const ws = new WebSocket('ws://localhost:1234');
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log('WebSocket connected');
       ws.send(
         JSON.stringify({
-          type: "JOIN_DOCUMENT",
+          type: 'JOIN_DOCUMENT',
           documentId: params.documentId,
-          username: "owner",
+          username: 'owner',
         })
       );
     };
@@ -50,13 +50,13 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
       const data = JSON.parse(event.data);
       console.log(data.type);
       switch (data.type) {
-        case "JOINED_DOCUMENT":
-          console.log("Joined document", data.message);
+        case 'JOINED_DOCUMENT':
+          console.log('Joined document', data.message);
           break;
-        case "USER_JOINED":
+        case 'USER_JOINED':
           console.log(`User ${data.username} joined the document`);
           break;
-        case "ACCESS_REQUEST":
+        case 'ACCESS_REQUEST':
           setAccessRequests((prev) => [
             ...prev,
             { username: data.username, documentId: data.documentId },
@@ -67,21 +67,21 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
           });
           setShowPopup(true);
           const timer = setTimeout(() => {
-            handleAccessDecision(data.username, "deny");
+            handleAccessDecision(data.username, 'deny');
           }, 5000);
           setPopupTimer(timer);
           break;
         default:
-          console.log("Unknown message type:", data.type);
+          console.log('Unknown message type:', data.type);
       }
     };
 
     ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
+      console.error('WebSocket error:', error);
     };
 
     ws.onclose = () => {
-      console.log("WebSocket disconnected");
+      console.log('WebSocket disconnected');
       setTimeout(connectWebSocket, 5000);
     };
 
@@ -93,13 +93,13 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
         const response = await fetch(
           `/api/notes?action=getById&documentId=${params.documentId}`
         );
-        if (!response.ok) throw new Error("Failed to fetch document");
+        if (!response.ok) throw new Error('Failed to fetch document');
         const doc = await response.json();
         setDocument(doc);
-        setContent(doc.content ?? "");
+        setContent(doc.content ?? '');
         setCollaborative(doc.isCollaborative);
       } catch (error) {
-        console.error("Error fetching document:", error);
+        console.error('Error fetching document:', error);
       }
     };
     fetchDocumentData();
@@ -118,17 +118,17 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   }, [connectWebSocket, params.documentId, popupTimer]);
 
   const handleContentChange = (newContent: string) => {
-    console.log("Updating content...");
+    console.log('Updating content...');
   };
 
   const handleAccessDecision = (
     username: string,
-    decision: "approve" | "deny"
+    decision: 'approve' | 'deny'
   ) => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(
         JSON.stringify({
-          type: decision === "approve" ? "APPROVE_ACCESS" : "DENY_ACCESS",
+          type: decision === 'approve' ? 'APPROVE_ACCESS' : 'DENY_ACCESS',
           documentId: params.documentId,
           username,
           content: document,
@@ -169,7 +169,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
                 <Button
                   size="sm"
                   onClick={() =>
-                    handleAccessDecision(currentRequest.username, "approve")
+                    handleAccessDecision(currentRequest.username, 'approve')
                   }
                 >
                   Approve
@@ -178,7 +178,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
                   size="sm"
                   variant="outline"
                   onClick={() =>
-                    handleAccessDecision(currentRequest.username, "deny")
+                    handleAccessDecision(currentRequest.username, 'deny')
                   }
                 >
                   Deny
@@ -221,7 +221,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
               <Button
                 size="sm"
                 onClick={() =>
-                  handleAccessDecision(currentRequest.username, "approve")
+                  handleAccessDecision(currentRequest.username, 'approve')
                 }
               >
                 Approve
@@ -230,7 +230,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
                 size="sm"
                 variant="outline"
                 onClick={() =>
-                  handleAccessDecision(currentRequest.username, "deny")
+                  handleAccessDecision(currentRequest.username, 'deny')
                 }
               >
                 Deny

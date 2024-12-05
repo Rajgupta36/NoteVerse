@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Check, Copy, Globe } from "lucide-react";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { Check, Copy, Globe } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover";
-import { useOrigin } from "@/hooks/use-origin";
-import { Button } from "@/components/ui/button";
-import { useRecoilState } from "recoil";
-import { collabrateAtom } from "@/store/atom";
+} from '@/components/ui/popover';
+import { useOrigin } from '@/hooks/use-origin';
+import { Button } from '@/components/ui/button';
+import { useRecoilState } from 'recoil';
+import { collabrateAtom } from '@/store/atom';
 
 interface Collabrate {
   initialData: any;
@@ -28,7 +28,7 @@ export function Collabrate({ initialData }: Collabrate) {
   const url = `${origin}/Collabrate?docId${initialData.id}`;
 
   useEffect(() => {
-    console.log("isCollaborative", isCollaborative);
+    console.log('isCollaborative', isCollaborative);
     setAtom(isCollaborative);
   }, [isCollaborative]);
 
@@ -40,10 +40,10 @@ export function Collabrate({ initialData }: Collabrate) {
     isCollaborative: boolean;
   }) => {
     try {
-      const response = await fetch("/api/notes?action=update", {
-        method: "POST",
+      const response = await fetch('/api/notes?action=update', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           id,
@@ -54,7 +54,7 @@ export function Collabrate({ initialData }: Collabrate) {
       if (!response.ok) {
         const errorDetails = await response.json();
         throw new Error(
-          errorDetails.message || "Could not update collaboration status."
+          errorDetails.message || 'Could not update collaboration status.'
         );
       }
       setIsCollaborative(isCollaborative);
@@ -71,9 +71,9 @@ export function Collabrate({ initialData }: Collabrate) {
     }).finally(() => setIsSubmitting(false));
 
     toast.promise(promise, {
-      loading: "Enabling collaboration...",
-      success: "Collaboration enabled!",
-      error: "Failed to enable collaboration.",
+      loading: 'Enabling collaboration...',
+      success: 'Collaboration enabled!',
+      error: 'Failed to enable collaboration.',
     });
   };
 
@@ -85,9 +85,9 @@ export function Collabrate({ initialData }: Collabrate) {
     }).finally(() => setIsSubmitting(false));
 
     toast.promise(promise, {
-      loading: "Disabling collaboration...",
-      success: "Collaboration disabled!",
-      error: "Failed to disable collaboration.",
+      loading: 'Disabling collaboration...',
+      success: 'Collaboration disabled!',
+      error: 'Failed to disable collaboration.',
     });
   };
 
@@ -101,7 +101,7 @@ export function Collabrate({ initialData }: Collabrate) {
         }, 1000);
       })
       .catch(() => {
-        toast.error("Failed to copy the link.");
+        toast.error('Failed to copy the link.');
       });
   };
 

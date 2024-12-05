@@ -1,4 +1,4 @@
-import { Navbar } from "../(marketing)/_components/Navbar";
+import { Navbar } from '../(marketing)/_components/Navbar';
 
 export default function MarketingLayout({
   children,

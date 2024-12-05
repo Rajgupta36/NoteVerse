@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { useConverImage } from "@/hooks/use-cover-image";
-import { SingleImageDropzone } from "@/components/single-image-dropzone";
-import { useEdgeStore } from "@/lib/edgestore";
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
+import { useConverImage } from '@/hooks/use-cover-image';
+import { SingleImageDropzone } from '@/components/single-image-dropzone';
+import { useEdgeStore } from '@/lib/edgestore';
 
 export function CoverImageModal() {
   const params = useParams();
@@ -16,10 +16,10 @@ export function CoverImageModal() {
     id: string;
     coverImage: any;
   }) => {
-    const response = await fetch("/api/notes?action=update", {
-      method: "POST",
+    const response = await fetch('/api/notes?action=update', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         id,

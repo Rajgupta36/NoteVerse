@@ -1,12 +1,12 @@
-"use client";
-import { useParams } from "next/navigation";
-import { MenuIcon } from "lucide-react";
-import { Title } from "./Title";
-import { Banner } from "./Banner";
-import { Menu } from "./Menu";
-import { Publish } from "./Publish";
-import { Collabrate } from "./Collabrate";
-import { useEffect, useState } from "react";
+'use client';
+import { useParams } from 'next/navigation';
+import { MenuIcon } from 'lucide-react';
+import { Title } from './Title';
+import { Banner } from './Banner';
+import { Menu } from './Menu';
+import { Publish } from './Publish';
+import { Collabrate } from './Collabrate';
+import { useEffect, useState } from 'react';
 interface NavbarProps {
   isCollapsed: boolean;
   onResetWidth: () => void;
@@ -22,12 +22,12 @@ export function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
           `/api/notes?action=getById&documentId=${params.documentId}`
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch document");
+          throw new Error('Failed to fetch document');
         }
         const doc = await response.json();
         setDocument(doc);
       } catch (error: any) {
-        console.error("Error fetching document:", error);
+        console.error('Error fetching document:', error);
       } finally {
         setLoading(false);
       }

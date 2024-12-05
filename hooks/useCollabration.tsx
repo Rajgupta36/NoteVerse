@@ -1,6 +1,6 @@
-import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
-import { useEffect, useState } from "react";
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+import { useEffect, useState } from 'react';
 
 export function useCollaboration(documentId: string) {
   const [ydoc, setYdoc] = useState<Y.Doc | null>(null);
@@ -9,7 +9,7 @@ export function useCollaboration(documentId: string) {
   useEffect(() => {
     const doc = new Y.Doc();
     const newProvider = new WebsocketProvider(
-      "ws://localhost:1234",
+      'ws://localhost:1234',
       documentId,
       doc
     );

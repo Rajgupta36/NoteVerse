@@ -1,17 +1,17 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import { toast } from "sonner";
-import { MoreHorizontal, Trash } from "lucide-react";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
+import { toast } from 'sonner';
+import { MoreHorizontal, Trash } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface MenuProps {
   documentId: string;
@@ -23,9 +23,9 @@ export function Menu({ documentId }: MenuProps) {
 
   const archive = async ({ documentId }: { documentId: string }) => {
     const response = await fetch(`/api/notes?action=archive`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ documentId }),
     });
@@ -37,11 +37,11 @@ export function Menu({ documentId }: MenuProps) {
     const promise = archive({ documentId });
 
     toast.promise(promise, {
-      loading: "Moving to trash...",
-      success: "Note Moved to trash!",
-      error: "Failed to archive note.",
+      loading: 'Moving to trash...',
+      success: 'Note Moved to trash!',
+      error: 'Failed to archive note.',
     });
-    router.push("/documents");
+    router.push('/documents');
   };
 
   return (

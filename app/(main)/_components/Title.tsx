@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import React, { useRef, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface TitleProps {
   initialData: any;
@@ -11,32 +11,32 @@ interface TitleProps {
 
 export function Title({ initialData }: TitleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [title, setTitle] = useState(initialData.title || "Untitled");
+  const [title, setTitle] = useState(initialData.title || 'Untitled');
   const [isEditing, setIsEditing] = useState(false);
 
   // Function to update the title in the backend
   const update = async ({ id, tit }: { id: string; tit: string }) => {
-    console.log("Updating title:", tit); // Debug log for tracking the update
+    console.log('Updating title:', tit); // Debug log for tracking the update
 
     try {
-      const response = await fetch("/api/notes?action=update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/notes?action=update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: id,
           updatedContent: { title: tit },
         }),
       });
       if (!response.ok) {
-        throw new Error("Failed to update title");
+        throw new Error('Failed to update title');
       }
       const res = await response.json();
-      console.log("Updated Response:", res);
+      console.log('Updated Response:', res);
 
       // Update the title with the response from the server
       setTitle(res.title);
     } catch (error) {
-      console.error("Error updating title:", error);
+      console.error('Error updating title:', error);
     }
   };
 
@@ -55,7 +55,7 @@ export function Title({ initialData }: TitleProps) {
     // Update the title in the backend only when editing is done (blur or Enter)
     update({
       id: initialData.id,
-      tit: title || "Untitled", // Default to "Untitled" if title is empty
+      tit: title || 'Untitled', // Default to "Untitled" if title is empty
     });
   };
 
@@ -66,7 +66,7 @@ export function Title({ initialData }: TitleProps) {
 
   // Handle keyboard events (for pressing Enter)
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       disableInput();
     }
   };

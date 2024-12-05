@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { ChevronsLeftRight } from "lucide-react";
+import { ChevronsLeftRight } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { SignOutButton, useUser } from "@clerk/nextjs";
-import { Avatar } from "@/components/ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
+} from '@/components/ui/dropdown-menu';
+import { SignOutButton, useUser } from '@clerk/nextjs';
+import { Avatar } from '@/components/ui/avatar';
+import { AvatarImage } from '@radix-ui/react-avatar';
 
 export function UserItem() {
   const { user } = useUser();

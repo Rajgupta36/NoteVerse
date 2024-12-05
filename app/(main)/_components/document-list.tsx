@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Item } from "./Item";
-import { FileIcon } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Item } from './Item';
+import { FileIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface DocumentListProps {
   newdocs?: any;
@@ -39,15 +39,15 @@ export function DocumentList({
         );
 
         if (!response.ok) {
-          throw new Error("Failed to get notes");
+          throw new Error('Failed to get notes');
         }
 
         const data = await response.json();
         setDocuments(data || []);
         setIsLoading(false);
-        toast.success("Notes fetched successfully");
+        toast.success('Notes fetched successfully');
       } catch (error) {
-        toast.error("Failed to get notes");
+        toast.error('Failed to get notes');
         console.error(error);
         setIsLoading(false);
       }
@@ -88,8 +88,8 @@ export function DocumentList({
       <p
         className={cn(
           `hidden text-sm font-medium text-muted-foreground/80`,
-          expanded && "last:block",
-          level === 0 && "hidden"
+          expanded && 'last:block',
+          level === 0 && 'hidden'
         )}
         style={{ paddingLeft: level ? `${level * 12 + 25}px` : undefined }}
       >

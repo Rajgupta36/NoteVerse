@@ -1,6 +1,6 @@
-import { Footer } from "./_components/Footer";
-import Heading from "./_components/Heading";
-import Image from "next/image";
+import { Footer } from './_components/Footer';
+import Heading from './_components/Heading';
+import Image from 'next/image';
 
 export default function MarketingPage() {
   return (

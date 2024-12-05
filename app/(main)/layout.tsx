@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Spinner } from "@/components/spinner";
-import { redirect } from "next/navigation";
-import React from "react";
-import { Navigation } from "./_components/Navigation";
-import { SearchCommand } from "@/components/search-command";
-import { useAuth } from "@clerk/nextjs";
+import { Spinner } from '@/components/spinner';
+import { redirect } from 'next/navigation';
+import React from 'react';
+import { Navigation } from './_components/Navigation';
+import { SearchCommand } from '@/components/search-command';
+import { useAuth } from '@clerk/nextjs';
 
 export default function MainLayout({
   children,
@@ -23,7 +23,7 @@ export default function MainLayout({
   }
 
   if (!isSignedIn) {
-    return redirect("/");
+    return redirect('/');
   }
 
   return (

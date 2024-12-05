@@ -1,11 +1,11 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Search, Trash, Undo } from "lucide-react";
-import { toast } from "sonner";
-import { Spinner } from "@/components/spinner";
-import { Input } from "@/components/ui/input";
-import { ConfirmModal } from "@/components/modals/confirm-modal";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Search, Trash, Undo } from 'lucide-react';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/spinner';
+import { Input } from '@/components/ui/input';
+import { ConfirmModal } from '@/components/modals/confirm-modal';
 
 export function TrashBox() {
   const [documents, setDocuments] = useState<any[]>();
@@ -20,11 +20,11 @@ export function TrashBox() {
     documents().then((data) => setDocuments(data));
   }, []);
   const restore = async ({ id }: { id: string }) => {
-    console.log("id is ", id);
+    console.log('id is ', id);
     const response = await fetch(`/api/notes?action=restore`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id }),
     });
@@ -33,13 +33,13 @@ export function TrashBox() {
   };
   const remove = async ({ id }: { id: string }) => {
     const response = await fetch(`/api/notes?action=delete&documentId=${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
     const data = await response.json();
     return data;
   };
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const filteredDocuments = documents?.filter((document) => {
     return document.title.toLowerCase().includes(search.toLocaleLowerCase());
@@ -58,9 +58,9 @@ export function TrashBox() {
     const promise = restore({ id: documentId });
 
     toast.promise(promise, {
-      loading: "Restoring note...",
-      success: "Note restored!",
-      error: "Failed to restore note",
+      loading: 'Restoring note...',
+      success: 'Note restored!',
+      error: 'Failed to restore note',
     });
     promise.then(() => {
       setDocuments((prevDocuments) =>
@@ -73,9 +73,9 @@ export function TrashBox() {
     const promise = remove({ id: documentId });
 
     toast.promise(promise, {
-      loading: "Deleting note...",
-      success: "Note deleted!",
-      error: "Failed to delete note",
+      loading: 'Deleting note...',
+      success: 'Note deleted!',
+      error: 'Failed to delete note',
     });
     promise.then(() => {
       setDocuments((prevDocuments) =>
@@ -84,7 +84,7 @@ export function TrashBox() {
     });
 
     if (params.documentId === documentId) {
-      router.push("/documents");
+      router.push('/documents');
     }
   };
 

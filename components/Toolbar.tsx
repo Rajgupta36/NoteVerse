@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { ElementRef, useRef, useState } from "react";
-import { ImageIcon, Smile, X } from "lucide-react";
-import TextAreaAutoSize from "react-textarea-autosize";
-import { useConverImage } from "@/hooks/use-cover-image";
-import { Button } from "@/components/ui/button";
-import { IconPicker } from "./icon-picker";
+import React, { ElementRef, useRef, useState } from 'react';
+import { ImageIcon, Smile, X } from 'lucide-react';
+import TextAreaAutoSize from 'react-textarea-autosize';
+import { useConverImage } from '@/hooks/use-cover-image';
+import { Button } from '@/components/ui/button';
+import { IconPicker } from './icon-picker';
 
 interface ToolbarProps {
   initialData: any;
@@ -13,7 +13,7 @@ interface ToolbarProps {
 }
 
 export function Toolbar({ initialData, preview }: ToolbarProps) {
-  const inputRef = useRef<ElementRef<"textarea">>(null);
+  const inputRef = useRef<ElementRef<'textarea'>>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialData.title);
 
@@ -24,10 +24,10 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
     id: string;
     updatedContent: any;
   }) => {
-    const response = await fetch("/api/notes?action=update", {
-      method: "POST",
+    const response = await fetch('/api/notes?action=update', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         id: id,
@@ -36,14 +36,14 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to update docs");
+      throw new Error('Failed to update docs');
     }
   };
   const removeIcon = async ({ id }: { id: string }) => {
-    const response = await fetch("/api/notes?action=removeIcon", {
-      method: "POST",
+    const response = await fetch('/api/notes?action=removeIcon', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         documentId: id,
@@ -51,7 +51,7 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to remove icon");
+      throw new Error('Failed to remove icon');
     }
   };
 
@@ -73,12 +73,12 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
     setValue(value);
     update({
       id: initialData.id,
-      updatedContent: { title: value || "Untitled" },
+      updatedContent: { title: value || 'Untitled' },
     });
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       disableInput();
     }

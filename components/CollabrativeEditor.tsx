@@ -1,11 +1,11 @@
-"use client";
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import "@blocknote/core/style.css";
-import { useTheme } from "next-themes";
-import { useEdgeStore } from "@/lib/edgestore";
-import { useCollaboration } from "@/hooks/useCollabration";
-import { useEffect } from "react";
+'use client';
+import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+import { BlockNoteView, useBlockNote } from '@blocknote/react';
+import '@blocknote/core/style.css';
+import { useTheme } from 'next-themes';
+import { useEdgeStore } from '@/lib/edgestore';
+import { useCollaboration } from '@/hooks/useCollabration';
+import { useEffect } from 'react';
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -41,7 +41,7 @@ function CollabrativeEditor({
     };
   }, [ydoc]);
   // Initialize the editor
-  console.log("document", ydoc, "provider", provider);
+  console.log('document', ydoc, 'provider', provider);
   const editor = useBlockNote(
     ydoc
       ? {
@@ -51,10 +51,10 @@ function CollabrativeEditor({
           },
           uploadFile: handleUpload,
           collaboration: {
-            fragment: ydoc?.getXmlFragment("document-store"),
+            fragment: ydoc?.getXmlFragment('document-store'),
             provider,
             user: {
-              name: username || "guest-" + Math.floor(Math.random() * 1000),
+              name: username || 'guest-' + Math.floor(Math.random() * 1000),
               color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
             },
           },
@@ -69,7 +69,7 @@ function CollabrativeEditor({
     <div>
       <BlockNoteView
         editor={editor}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
+        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
       />
     </div>
   );
