@@ -9,7 +9,8 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
-    "websocket": "node websocket-server.js"
+    "websocket": "node websocket-server.js",
+    "prepare": "husky"
   },
   "dependencies": {
     "@blocknote/core": "^0.9.4",
@@ -59,6 +60,7 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.1",
+    "husky": "^9.1.7",
     "postcss": "^8",
     "prettier": "^3.4.2",
     "prisma": "^6.0.0",
