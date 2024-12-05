@@ -1,0 +1,14 @@
+import { Navbar } from "../(marketing)/_components/Navbar";
+
+export default function MarketingLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen dark:bg-[#1F1F1F]">
+      <Navbar />
+      <main className="h-full pt-14">{children}</main>
+    </div>
+  );
+}

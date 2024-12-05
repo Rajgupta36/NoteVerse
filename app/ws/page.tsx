@@ -36,15 +36,20 @@ export default function CollaboratePage() {
       switch (data.type) {
         case "ACCESS_REQUESTED":
           setAccessStatus("requested");
-          setDocument("content is ", data.content);
-          console.log(data.content);
           break;
-        case "ACCESS_GRANTED":
+        case "ACCESS_APPROVED":
           setAccessStatus("granted");
+          setDocument(data.document);
+          setContent(data.document.content);
           break;
         case "ACCESS_DENIED":
           setAccessStatus("denied");
           setError(data.message);
+          break;
+        case "DOCUMENT_UPDATED":
+          if (data.username !== username) {
+            setContent(data.document.content);
+          }
           break;
         default:
           console.log("Unknown message type:", data.type);
@@ -94,13 +99,13 @@ export default function CollaboratePage() {
   // Render the component based on the current state
   if (accessStatus === "idle") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-full mt-20">
+      <div className="flex flex-col items-center justify-center min-h-screen">
         <Input
           type="text"
           placeholder="Enter your username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mb-4 w-64 px-4 py-2 border border-gray-300 rounded-md"
+          className="mb-4 w-64"
         />
         <Button onClick={handleRequestAccess} disabled={!username}>
           Request Access
