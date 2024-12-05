@@ -75,7 +75,7 @@ export default function CollaboratePage() {
         socket.send(
           JSON.stringify({
             type: "REQUEST_ACCESS",
-            documentId: "7278d257-da43-489f-841f-6a1b3f8efe21", // Set the actual document ID
+            documentId: documentId, // Set the actual document ID
             username,
           })
         );
