@@ -47,8 +47,13 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     };
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log(data.type);
+      let data;
+      try {
+        data = JSON.parse(event.data);
+      } catch (error) {
+        console.log('Not a valid JSON message, skipping...');
+        return;
+      }
       switch (data.type) {
         case 'JOINED_DOCUMENT':
           console.log('Joined document', data.message);
@@ -158,7 +163,10 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
           </div>
         </div>
         {showPopup && currentRequest && (
-          <div className="fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-end items-center z-50">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            style={{ pointerEvents: 'all' }} // Ensures the popup handles click events
+          >
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
               <h3 className="text-xl font-semibold">New Access Request</h3>
               <p className="mt-4">
@@ -210,7 +218,10 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
         </div>
       </div>
       {showPopup && currentRequest && (
-        <div className="fixed top-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-end items-center z-50">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          style={{ pointerEvents: 'all' }} // Ensures the popup handles click events
+        >
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
             <h3 className="text-xl font-semibold">New Access Request</h3>
             <p className="mt-4">
@@ -239,7 +250,6 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
           </div>
         </div>
       )}
-      {/* Access Request Side Pop-up */}
     </div>
   );
 }

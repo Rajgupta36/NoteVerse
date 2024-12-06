@@ -1,5 +1,5 @@
 'use client';
-import { BlockNoteEditor, PartialBlock } from '@blocknote/core';
+
 import { BlockNoteView, useBlockNote } from '@blocknote/react';
 import '@blocknote/core/style.css';
 import { useTheme } from 'next-themes';
@@ -27,7 +27,7 @@ function CollabrativeEditor({
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
   const { ydoc, provider } = useCollaboration(documentId);
-
+  console.log('initialContent', initialContent);
   // Handle file uploads
   const handleUpload = async (file: File) => {
     const response = await edgestore.publicFiles.upload({ file });
@@ -50,12 +50,13 @@ function CollabrativeEditor({
             onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
           },
           uploadFile: handleUpload,
+          _tiptapOptions: {},
           collaboration: {
             fragment: ydoc?.getXmlFragment('document-store'),
             provider,
             user: {
               name: username || 'guest-' + Math.floor(Math.random() * 1000),
-              color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+              color: `hsl(${Math.random() * 360}, 70%, 50%)`,
             },
           },
         }
@@ -70,6 +71,7 @@ function CollabrativeEditor({
       <BlockNoteView
         editor={editor}
         theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        className="min-h[70vh]"
       />
     </div>
   );
