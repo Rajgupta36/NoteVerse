@@ -3,7 +3,7 @@ import { BlockNoteView, useBlockNote } from '@blocknote/react';
 import '@blocknote/core/style.css';
 import { useTheme } from 'next-themes';
 import { useEdgeStore } from '@/lib/edgestore';
-import { useEffect, useState } from 'react';
+import '@blocknote/core/style.css';
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -20,7 +20,8 @@ function Editor({
 }: EditorProps) {
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
-
+  console.log('editor render');
+  console.log('initial content', initialContent);
   const handleUpload = async (file: File) => {
     const response = await edgestore.publicFiles.upload({ file });
     return response.url;
@@ -29,6 +30,7 @@ function Editor({
   // Initialize the editor
   const editor: BlockNoteEditor | null = useBlockNote({
     editable,
+    enableBlockNoteExtensions: true,
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,

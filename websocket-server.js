@@ -1,11 +1,11 @@
 const WebSocket = require('ws');
 const http = require('http');
+const { setupWSConnection } = require('y-websocket/bin/utils');
 
-const server = http.createServer();
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ port: 1234 });
 
-const clients = new Map();
-const documents = new Map();
+const clients = new Map(); // Stores clients for each document
+const documents = new Map(); // Stores document metadata
 
 wss.on('connection', (ws) => {
   console.log('New client connected');
@@ -14,31 +14,37 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     let data;
     try {
-      data = JSON.parse(message); // Try parsing the message
+      data = JSON.parse(message); // Parse JSON
     } catch (error) {
-      // If the message is not valid JSON, simply skip further processing
       console.log('Not a valid JSON message, skipping...');
-      return; // Exit early without processing the invalid message
+      return; // Ignore invalid JSON
     }
 
-    // If parsing was successful, proceed to handle based on the parsed data
     console.log('Valid JSON received:', data);
-    console.log('Received message:', data);
 
-    if (data.type === 'JOIN_DOCUMENT') {
-      handleJoinDocument(ws, data);
-    } else if (data.type === 'REQUEST_ACCESS') {
-      handleRequestAccess(ws, data);
-    } else if (data.type === 'APPROVE_ACCESS') {
-      handleApproveAccess(ws, data);
-    } else if (data.type === 'DENY_ACCESS') {
-      handleDenyAccess(ws, data);
+    switch (data.type) {
+      case 'JOIN_DOCUMENT':
+        handleJoinDocument(ws, data);
+        break;
+      case 'REQUEST_ACCESS':
+        handleRequestAccess(ws, data);
+        break;
+      case 'APPROVE_ACCESS':
+        handleApproveAccess(ws, data);
+        break;
+      case 'DENY_ACCESS':
+        handleDenyAccess(ws, data);
+        break;
+      default:
+        console.log('Unknown message type:', data.type);
     }
   });
 
   // Handle client disconnection
   ws.on('close', () => {
     console.log('Client disconnected');
+
+    // Remove the client from the clients map
     for (const [documentId, clientSet] of clients.entries()) {
       if (clientSet.has(ws)) {
         clientSet.delete(ws);
@@ -48,42 +54,81 @@ wss.on('connection', (ws) => {
         break;
       }
     }
+
+    // Handle document owner disconnection
+    for (const [documentId, document] of documents.entries()) {
+      if (document.ownerconnection === ws) {
+        console.log(`Owner disconnected for document ${documentId}`);
+
+        // Notify and disconnect all collaborators
+        const collaborators = clients.get(documentId) || new Set();
+        collaborators.forEach((collaboratorWs) => {
+          collaboratorWs.send(
+            JSON.stringify({
+              type: 'ERROR',
+              message: `The owner of the document  has disconnected. You have been removed from the session.`,
+            })
+          );
+          collaboratorWs.close();
+        });
+
+        // Clean up
+        clients.delete(documentId);
+        documents.delete(documentId);
+        break;
+      }
+    }
   });
 });
 
 // Handle a client joining a document
 function handleJoinDocument(ws, data) {
   const { documentId, username } = data;
-  if (documents.has(documentId)) {
+  console.log(`${username} is trying to join document ${documentId}`);
+
+  const existingDocument = documents.get(documentId);
+
+  if (existingDocument) {
+    if (existingDocument.owner === username) {
+      console.log(`Owner ${username} rejoining document ${documentId}`);
+      existingDocument.ownerconnection = ws; // Update the owner's connection
+      ws.send(
+        JSON.stringify({
+          type: 'JOINED_DOCUMENT',
+          message: `You have rejoined your document "${documentId}".`,
+        })
+      );
+    } else {
+      ws.send(
+        JSON.stringify({
+          type: 'ERROR',
+          message: 'Document already exists and has a different owner.',
+        })
+      );
+    }
+  } else {
+    // Create a new document if it doesn't exist
+    documents.set(documentId, {
+      title: documentId,
+      owner: username,
+      ownerconnection: ws,
+    });
+
     ws.send(
       JSON.stringify({
-        type: 'ERROR',
-        message: 'Document already exists. Please choose a different document',
+        type: 'JOINED_DOCUMENT',
+        message: `You have created and joined document "${documentId}".`,
       })
     );
-    return;
   }
-  documents.set(documentId, {
-    title: documentId,
-    owner: username,
-    ownerconnection: ws,
-  });
-  console.log(`${username} is trying to join document ${documentId}`);
-  ws.send(
-    JSON.stringify({
-      type: 'JOINED_DOCUMENT',
-      message: `You have joined document "${documentId}".`,
-    })
-  );
 }
 
 // Handle a request for access to a document
 function handleRequestAccess(ws, data) {
   const { documentId, username } = data;
   const document = documents.get(documentId);
-  console.log('Requesting access to document:', documentId);
+
   if (document) {
-    // If the document owner is trying to request access to their own document
     if (document.owner === username) {
       ws.send(
         JSON.stringify({
@@ -94,7 +139,6 @@ function handleRequestAccess(ws, data) {
       return;
     }
 
-    // Look for the owner in the list of clients
     const ownerWs = document.ownerconnection;
 
     if (ownerWs) {
@@ -106,9 +150,9 @@ function handleRequestAccess(ws, data) {
         })
       );
       const clientSet = clients.get(documentId) || new Set();
-      clientSet.add({ ws: ws, username: username });
+      clientSet.add(ws);
       clients.set(documentId, clientSet);
-      // Notify the requester
+
       ws.send(
         JSON.stringify({
           type: 'ACCESS_REQUESTED',
@@ -119,7 +163,7 @@ function handleRequestAccess(ws, data) {
       ws.send(
         JSON.stringify({
           type: 'ERROR',
-          message: 'Document owner is not connected.',
+          message: 'Document is not accessible.',
         })
       );
     }
@@ -137,32 +181,19 @@ function handleRequestAccess(ws, data) {
 function handleApproveAccess(ws, data) {
   const { content, documentId, username } = data;
   const document = documents.get(documentId);
-  console.log(
-    `Owner is approving access for ${username} to document ${documentId}`
-  );
-  console.log('the content is', content);
+
   if (document) {
-    const requesterWs = Array.from(clients.get(documentId) || []).find(
-      (client) => client.username === username
-    );
-    if (requesterWs.ws) {
-      // Approve the request
-      console.log('the content is', content);
-      requesterWs.ws.send(
+    const clientSet = clients.get(documentId) || new Set();
+
+    clientSet.forEach((collaboratorWs) => {
+      collaboratorWs.send(
         JSON.stringify({
           type: 'ACCESS_GRANTED',
-          content: content,
+          content,
           message: `Your request to access the document "${document.title}" has been approved.`,
         })
       );
-    } else {
-      ws.send(
-        JSON.stringify({
-          type: 'ERROR',
-          message: 'Requester is not connected.',
-        })
-      );
-    }
+    });
   } else {
     ws.send(
       JSON.stringify({
@@ -174,36 +205,21 @@ function handleApproveAccess(ws, data) {
 }
 
 // Handle denial of access request
-
 function handleDenyAccess(ws, data) {
   const { documentId, username } = data;
   const document = documents.get(documentId);
-  console.log(
-    `Owner is denying access for ${username} to document ${documentId}`
-  );
 
   if (document) {
-    const requesterWs = Array.from(clients.get(documentId) || []).find(
-      (client) => client.username === username
-    );
-    console.log(requesterWs);
+    const clientSet = clients.get(documentId) || new Set();
 
-    if (requesterWs.ws) {
-      // Deny the request
-      requesterWs.ws.send(
+    clientSet.forEach((collaboratorWs) => {
+      collaboratorWs.send(
         JSON.stringify({
           type: 'ACCESS_DENIED',
           message: `Your request to access the document "${document.title}" has been denied.`,
         })
       );
-    } else {
-      ws.send(
-        JSON.stringify({
-          type: 'ERROR',
-          message: 'Requester is not connected.',
-        })
-      );
-    }
+    });
   } else {
     ws.send(
       JSON.stringify({
@@ -213,8 +229,9 @@ function handleDenyAccess(ws, data) {
     );
   }
 }
+wss.on('connection', (ws, req) => {
+  setupWSConnection(ws, req, { gc: true });
+});
 
 const PORT = process.env.PORT || 1234;
-server.listen(PORT, () => {
-  console.log(`WebSocket server is running on ws://localhost:${PORT}`);
-});
+console.log(`WebSocket server is running on port ${PORT}`);

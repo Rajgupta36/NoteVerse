@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import { collabrateAtom } from '@/store/atom';
 import CollabrativeEditor from '@/components/CollabrativeEditor';
 import { Button } from '@/components/ui/button';
+import Editor from '@/components/Editor';
 
 interface DocumentIdPageProps {
   params: {
@@ -32,8 +33,10 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   );
   const [popupTimer, setPopupTimer] = useState<NodeJS.Timeout | null>(null);
 
-  // WebSocket connection to server
+  // WebSocket connection to server, only if collaborative
   const connectWebSocket = useCallback(() => {
+    if (!isCollaborative) return;
+
     const ws = new WebSocket('ws://localhost:1234');
     ws.onopen = () => {
       console.log('WebSocket connected');
@@ -91,7 +94,8 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     };
 
     setSocket(ws);
-  }, [params.documentId, setCollaborative]);
+  }, [params.documentId, isCollaborative]);
+
   useEffect(() => {
     const fetchDocumentData = async () => {
       try {
@@ -109,8 +113,11 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     };
     fetchDocumentData();
   }, [params.documentId]);
+
   useEffect(() => {
-    connectWebSocket();
+    if (isCollaborative) {
+      connectWebSocket();
+    }
 
     return () => {
       if (socket) {
@@ -120,7 +127,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
         clearTimeout(popupTimer);
       }
     };
-  }, [connectWebSocket, params.documentId, popupTimer]);
+  }, [connectWebSocket, isCollaborative, params.documentId, popupTimer]);
 
   const handleContentChange = (newContent: string) => {
     console.log('Updating content...');
@@ -165,11 +172,13 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
         {showPopup && currentRequest && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-            style={{ pointerEvents: 'all' }} // Ensures the popup handles click events
+            style={{ pointerEvents: 'all' }}
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-              <h3 className="text-xl font-semibold">New Access Request</h3>
-              <p className="mt-4">
+            <div className="bg-gray-500 dark:bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+              <h3 className="text-xl font-semibold dark:text-black">
+                New Access Request
+              </h3>
+              <p className="mt-4 dark:text-black">
                 User {currentRequest.username} is requesting access to this
                 document.
               </p>
@@ -180,7 +189,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
                     handleAccessDecision(currentRequest.username, 'approve')
                   }
                 >
-                  Approve
+                  Approved
                 </Button>
                 <Button
                   size="sm"
@@ -206,14 +215,22 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
         <Toolbar initialData={document} />
         <div className="flex gap-4">
           <div className="flex-grow">
-            <CollabrativeEditor
-              onChange={handleContentChange}
-              initialContent={content}
-              documentId={params.documentId}
-              editable={true}
-              isCollaborative={isCollaborative}
-              username="owner"
-            />
+            {isCollaborative ? (
+              <CollabrativeEditor
+                onChange={handleContentChange}
+                initialContent={content}
+                documentId={params.documentId}
+                username="owner"
+                isCollaborative={isCollaborative}
+              />
+            ) : (
+              <Editor
+                onChange={handleContentChange}
+                initialContent={content}
+                documentId={params.documentId}
+                editable={true}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -223,8 +240,10 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
           style={{ pointerEvents: 'all' }} // Ensures the popup handles click events
         >
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h3 className="text-xl font-semibold">New Access Request</h3>
-            <p className="mt-4">
+            <h3 className="text-xl font-semibold dark:text-black">
+              New Access Request
+            </h3>
+            <p className="mt-4 dark:text-black">
               User {currentRequest.username} is requesting access to this
               document.
             </p>

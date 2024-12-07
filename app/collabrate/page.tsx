@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { UserIcon, CalendarIcon, Settings2 } from 'lucide-react';
 import { Spinner } from '@/components/spinner';
+import Error from '../error';
+import ErrorPopup from './error';
 
 export default function CollaboratePage() {
   const [document, setDocument] = useState<any>(null);
@@ -33,6 +35,11 @@ export default function CollaboratePage() {
     };
 
     ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+      } catch (e) {
+        return;
+      }
       const data = JSON.parse(event.data);
       switch (data.type) {
         case 'ACCESS_REQUESTED':
@@ -46,6 +53,10 @@ export default function CollaboratePage() {
         case 'ACCESS_DENIED':
           setAccessStatus('denied');
           setError(data.message);
+          break;
+        case 'ERROR':
+          setError(data.message);
+          setAccessStatus('denied');
           break;
         default:
           console.log('Unknown message type:', data.type);

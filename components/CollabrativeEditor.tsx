@@ -27,8 +27,7 @@ function CollabrativeEditor({
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
   const { ydoc, provider } = useCollaboration(documentId);
-  console.log('initialContent', initialContent);
-  // Handle file uploads
+  console.log('collabrative editor render ydoc', ydoc, 'provider', provider);
   const handleUpload = async (file: File) => {
     const response = await edgestore.publicFiles.upload({ file });
     return response.url;
@@ -41,16 +40,9 @@ function CollabrativeEditor({
     };
   }, [ydoc]);
   // Initialize the editor
-  console.log('document', ydoc, 'provider', provider);
   const editor = useBlockNote(
     ydoc
       ? {
-          editable,
-          onEditorContentChange: (editor) => {
-            onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
-          },
-          uploadFile: handleUpload,
-          _tiptapOptions: {},
           collaboration: {
             fragment: ydoc?.getXmlFragment('document-store'),
             provider,
