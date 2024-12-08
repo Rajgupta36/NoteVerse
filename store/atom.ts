@@ -8,4 +8,4 @@ export const collabrateAtom = atom<boolean>({
 export const titleAtom = atom<string>({
   key: 'title',
   default: '',
-})
+});

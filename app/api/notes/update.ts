@@ -26,7 +26,7 @@ export const update = async ({
     throw new Error('You are not authorized to update this document');
   }
   // Update the document
-  console.log("data", updatedContent);
+  console.log('data', updatedContent);
   const updatedDocument = await prisma.document.update({
     where: { id },
     data: {

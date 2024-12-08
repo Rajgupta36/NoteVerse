@@ -4,7 +4,6 @@ import { auth } from '@clerk/nextjs/server';
 
 export const getById = async ({ id }: { id: string }) => {
   try {
-
     const document = await prisma.document.findUnique({
       where: { id: id as string },
     });
