@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useRecoilState } from 'recoil';
+import { titleAtom } from '@/store/atom';
 
 interface TitleProps {
   initialData: any;
@@ -11,13 +13,18 @@ interface TitleProps {
 
 export function Title({ initialData }: TitleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [title, setTitle] = useState(initialData.title || 'Untitled');
+  const [title, setTitle] = useRecoilState(titleAtom);
   const [isEditing, setIsEditing] = useState(false);
+
+  // Initialize title once on component mount
+  useEffect(() => {
+    setTitle(initialData.title);
+  }, [initialData.title, setTitle]);
 
   // Function to update the title in the backend
   const update = async ({ id, tit }: { id: string; tit: string }) => {
     console.log('Updating title:', tit); // Debug log for tracking the update
-
+    setTitle(tit);
     try {
       const response = await fetch('/api/notes?action=update', {
         method: 'POST',

@@ -1,11 +1,13 @@
 'use client';
 
-import React, { ElementRef, useRef, useState } from 'react';
+import React, { ElementRef, useEffect, useRef, useState } from 'react';
 import { ImageIcon, Smile, X } from 'lucide-react';
 import TextAreaAutoSize from 'react-textarea-autosize';
 import { useConverImage } from '@/hooks/use-cover-image';
 import { Button } from '@/components/ui/button';
 import { IconPicker } from './icon-picker';
+import { useRecoilState } from 'recoil';
+import { titleAtom } from '@/store/atom';
 
 interface ToolbarProps {
   initialData: any;
@@ -16,7 +18,11 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
   const inputRef = useRef<ElementRef<'textarea'>>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialData.title);
+  const [title, setTitle] = useRecoilState(titleAtom);
 
+  useEffect(() => {
+    setTitle(initialData.title);
+  }, []);
   const update = async ({
     id,
     updatedContent,
@@ -59,7 +65,6 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
 
   const enableInput = () => {
     if (preview) return;
-
     setIsEditing(true);
     setTimeout(() => {
       setValue(initialData.title);
@@ -70,6 +75,7 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
   const disableInput = () => setIsEditing(false);
 
   const onInput = (value: string) => {
+    setTitle(value);
     setValue(value);
     update({
       id: initialData.id,
@@ -160,7 +166,7 @@ export function Toolbar({ initialData, preview }: ToolbarProps) {
           className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]"
           onClick={enableInput}
         >
-          {initialData.title}
+          {title}
         </div>
       )}
     </div>

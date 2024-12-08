@@ -40,30 +40,6 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     fetchDocument();
   }, [params.documentId]);
 
-  // Function to update the document content
-  const updateDocument = async (content: string) => {
-    try {
-      const response = await fetch('/api/notes?action=update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: params.documentId, content }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update document');
-      }
-      const updatedDoc = await response.json();
-      toast.success('Document updated successfully');
-      setDocument(updatedDoc); // Update document state after successful update
-    } catch (error) {
-      toast.error('Failed to update document');
-    }
-  };
-
-  const onChange = (content: string) => {
-    updateDocument(content);
-  };
-
-  // Loading skeleton
   if (isLoading || document === undefined) {
     return (
       <div>
@@ -84,17 +60,13 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   if (document === null) {
     return <div>Not Found</div>;
   }
-
+  console.log(document);
   return (
     <div className="pb-40">
       <Cover preview url={document.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <Toolbar preview initialData={document} />
-        <Editor
-          editable={false}
-          onChange={onChange}
-          initialContent={document.content}
-        />
+        <Editor editable={false} initialContent={document.content} />
       </div>
     </div>
   );

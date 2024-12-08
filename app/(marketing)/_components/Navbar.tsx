@@ -20,7 +20,7 @@ export function Navbar() {
       <Logo />
       <div className="md:ml-auto md:justify-end flex gap-x-2 justify-between items-center w-full">
         {!isLoaded && <Spinner />}
-        {!isSignedIn && !isLoaded && (
+        {!isSignedIn && isLoaded && (
           <>
             <SignInButton mode="modal">
               <Button variant="ghost" size="sm">

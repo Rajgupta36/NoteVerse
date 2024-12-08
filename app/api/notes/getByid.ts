@@ -4,11 +4,6 @@ import { auth } from '@clerk/nextjs/server';
 
 export const getById = async ({ id }: { id: string }) => {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      throw new Error('Not authenticated');
-    }
 
     const document = await prisma.document.findUnique({
       where: { id: id as string },

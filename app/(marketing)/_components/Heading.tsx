@@ -7,7 +7,7 @@ import { SignInButton, useAuth } from '@clerk/nextjs';
 
 export default function Heading() {
   const { isLoaded, isSignedIn } = useAuth();
-
+  console.log(isLoaded, isSignedIn);
   return (
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
@@ -31,7 +31,7 @@ export default function Heading() {
           </Link>
         </Button>
       )}
-      {!isSignedIn && !isLoaded && (
+      {!isSignedIn && isLoaded && (
         <SignInButton mode="modal">
           <Button>
             Get NoteVerse Free

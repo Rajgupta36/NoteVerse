@@ -25,7 +25,7 @@ export function Collabrate({ initialData }: Collabrate) {
   const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [atom, setAtom] = useRecoilState(collabrateAtom);
-  const url = `${origin}/Collabrate?docId${initialData.id}`;
+  const url = `${origin}/collabrate?docId=${initialData.id}`;
 
   useEffect(() => {
     console.log('isCollaborative', isCollaborative);

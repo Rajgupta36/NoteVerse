@@ -43,6 +43,9 @@ function CollabrativeEditor({
   const editor = useBlockNote(
     ydoc
       ? {
+          onEditorContentChange: (editor) => {
+            onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
+          },
           collaboration: {
             fragment: ydoc?.getXmlFragment('document-store'),
             provider,

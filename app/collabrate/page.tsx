@@ -1,20 +1,18 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Cover } from '@/components/Cover';
 import { Skeleton } from '@/components/ui/skeleton';
 import CollabrativeEditor from '@/components/CollabrativeEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { UserIcon, CalendarIcon, Settings2 } from 'lucide-react';
+import { UserIcon, CalendarIcon } from 'lucide-react';
 import { Spinner } from '@/components/spinner';
-import Error from '../error';
-import ErrorPopup from './error';
+import { useUser } from '@clerk/nextjs';
 
 export default function CollaboratePage() {
   const [document, setDocument] = useState<any>(null);
-  const [content, setContent] = useState<string>('');
+  const { user, isLoaded } = useUser();
   const [error, setError] = useState<string>('');
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [username, setUsername] = useState<string>('');
@@ -22,6 +20,13 @@ export default function CollaboratePage() {
   const [accessStatus, setAccessStatus] = useState<
     'idle' | 'requested' | 'granted' | 'denied'
   >('idle');
+
+  useEffect(() => {
+    // Auto-fill username if user is logged in
+    if (user) {
+      setUsername(user.firstName ?? user.fullName ?? '');
+    }
+  }, [user]);
 
   const connectWebSocket = useCallback(() => {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -74,7 +79,7 @@ export default function CollaboratePage() {
     };
 
     setSocket(ws);
-  }, [username, socket]);
+  }, [socket]);
 
   const handleRequestAccess = () => {
     if (username && accessStatus === 'idle') {
@@ -86,7 +91,7 @@ export default function CollaboratePage() {
         socket.send(
           JSON.stringify({
             type: 'REQUEST_ACCESS',
-            documentId: documentId,
+            documentId,
             username,
           })
         );
@@ -102,6 +107,15 @@ export default function CollaboratePage() {
     };
   }, [socket]);
 
+  if (!isLoaded) {
+    return (
+      <div className="flex flex-col items-center  dark:bg-[#1F1F1F] border-2 dark:text-white justify-center min-h-screen">
+        <Spinner size="lg" />
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   if (accessStatus === 'idle') {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen dark:bg-[#1F1F1F] dark:text-white">
@@ -110,19 +124,23 @@ export default function CollaboratePage() {
             Welcome to NoteVerse
           </h1>
           <div className="space-y-4">
-            <Input
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full dark:bg-[#2C2C2C] border-2 dark:text-white placeholder:text-black dark:placeholder:text-gray-400"
-            />
+            {!user && (
+              <Input
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full dark:bg-[#2C2C2C] border-2 dark:text-white placeholder:text-black dark:placeholder:text-gray-400"
+              />
+            )}
             <Button
               onClick={handleRequestAccess}
               disabled={!username}
               className="w-full bg-black dark:bg-white dark:text-black dark:hover:bg-gray-200"
             >
-              Request Access
+              {user
+                ? 'Double-click to request access'
+                : 'Enter your name and double-click to request access'}
             </Button>
           </div>
         </div>

@@ -129,8 +129,24 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
     };
   }, [connectWebSocket, isCollaborative, params.documentId, popupTimer]);
 
-  const handleContentChange = (newContent: string) => {
-    console.log('Updating content...');
+  const handleContentChange = async (newContent: string) => {
+    setContent(newContent);
+    console.log('new content:', newContent);
+    const res = await fetch('/api/notes?action=update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: params.documentId,
+        updatedContent: { content: newContent },
+      }),
+    });
+    if (!res.ok) {
+      console.error('Failed to update document');
+    } else {
+      console.log('content updated.');
+    }
   };
 
   const handleAccessDecision = (
