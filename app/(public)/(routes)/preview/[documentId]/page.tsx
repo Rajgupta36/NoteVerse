@@ -66,7 +66,11 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
       <Cover preview url={document.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <Toolbar preview initialData={document} />
-        <Editor editable={false} initialContent={document.content} />
+        <Editor
+          editable={false}
+          initialContent={document.content}
+          onChange={() => {}}
+        />
       </div>
     </div>
   );

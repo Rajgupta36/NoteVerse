@@ -6,7 +6,7 @@ import { useEdgeStore } from '@/lib/edgestore';
 import '@blocknote/core/style.css';
 
 interface EditorProps {
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
   documentId?: string;
