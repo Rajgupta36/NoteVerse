@@ -7,9 +7,10 @@ export function useCollaboration(documentId: string) {
   const [provider, setProvider] = useState<WebsocketProvider | null>(null);
 
   useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_DEPLOYMENT_URL);
     const doc = new Y.Doc();
     const newProvider = new WebsocketProvider(
-      'ws://localhost:1234',
+      `ws://${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}:1234`,
       documentId,
       doc
     );
