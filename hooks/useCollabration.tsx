@@ -10,7 +10,7 @@ export function useCollaboration(documentId: string) {
     console.log(process.env.NEXT_PUBLIC_DEPLOYMENT_URL);
     const doc = new Y.Doc();
     const newProvider = new WebsocketProvider(
-      `ws://${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}:1234`,
+      `wss://${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}`,
       documentId,
       doc
     );

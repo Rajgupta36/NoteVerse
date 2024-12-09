@@ -37,9 +37,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   const connectWebSocket = useCallback(() => {
     if (!isCollaborative) return;
 
-    const ws = new WebSocket(
-      `ws://${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}:1234`
-    );
+    const ws = new WebSocket(`wss://${process.env.NEXT_PUBLIC_DEPLOYMENT_URL}`);
     ws.onopen = () => {
       console.log('WebSocket connected');
       ws.send(
